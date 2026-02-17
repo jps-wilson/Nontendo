@@ -1,0 +1,987 @@
+/* NOTES: 
+    - need to adjust the shadows to use one type of way to show the shadow for depth
+    - add some instruction for how to play
+    - add more spacing between the toggle and off and on and screen and bar above
+    - change the wrapper of the d-pad to be a dark grey or black
+    - add font credit in footer?
+
+*/
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --light-yellow: #fdc262;
+  --orange: #fca417;
+  --dark-orange: #f96c07;
+  --dark-orange-shadow: #f75605;
+  --screen: #838f6f;
+  --darkGray: #514447;
+  --darkGray2: #66494a;
+  --red: #ff2020;
+  --cream: #d6ccc2;
+}
+
+body {
+  background: linear-gradient(135deg, #d6ccc2 0%, #c4bab0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  font-family: "Bitty", monospace;
+}
+
+/* Main Game Boy Body with enhanced realism */
+.wrapper {
+  width: 306px;
+  height: 498px;
+  background: linear-gradient(
+    145deg,
+    #fdd682 0%,
+    var(--light-yellow) 50%,
+    #fcb952 100%
+  );
+  border-radius: 12px 12px 50px 12px;
+  border: 6px solid #000;
+  box-shadow:
+    29px 20px 0px #b0a89f,
+    inset -2px -2px 8px rgba(0, 0, 0, 0.15),
+    inset 2px 2px 8px rgba(255, 255, 255, 0.4),
+    0 20px 40px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+  margin: 50px 0;
+}
+
+.wrapper:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 10px;
+  right: 10px;
+  background: linear-gradient(
+    145deg,
+    #fcb347 0%,
+    var(--orange) 50%,
+    #fb9617 100%
+  );
+  border-radius: 10px 10px 20px 10px;
+  z-index: 2;
+  box-shadow: inset 1px 1px 4px rgba(255, 255, 255, 0.3);
+}
+
+.wrapper:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 10px;
+  left: 10px;
+  right: 0;
+  background: linear-gradient(
+    145deg,
+    #fa7c17 0%,
+    var(--dark-orange) 50%,
+    #f85c05 100%
+  );
+  z-index: 1;
+  border-radius: 10px 0 0 10px;
+  box-shadow: inset -1px -1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.bottomCornerAngle {
+  position: absolute;
+  bottom: 6px;
+  right: 10px;
+  border-bottom: 85px solid var(--dark-orange);
+  border-left: 85px solid transparent;
+  z-index: 3;
+  filter: brightness(0.95);
+}
+
+.bottomShadow {
+  position: absolute;
+  bottom: -14px;
+  height: 20px;
+  left: 10px;
+  border-radius: 7px;
+  background: linear-gradient(180deg, var(--dark-orange) 0%, #e75005 100%);
+  right: 0;
+  z-index: 4;
+}
+
+.topStripes {
+  position: absolute;
+  z-index: 5;
+  width: 100%;
+  height: 5px;
+  top: 23px;
+  background: #000;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.topStripes:before {
+  content: "";
+  position: absolute;
+  background: linear-gradient(180deg, #1a1a1a 0%, #000 100%);
+  width: 4px;
+  height: 30px;
+  left: 27px;
+  top: -25px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.topStripes:after {
+  content: "";
+  position: absolute;
+  background: linear-gradient(180deg, #1a1a1a 0%, #000 100%);
+  width: 4px;
+  height: 30px;
+  right: 27px;
+  top: -25px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* LCD glass + vignette (always visible) */
+.screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.04) 35%,
+    rgba(0, 0, 0, 0.12) 100%
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+.screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.03) 0px,
+      rgba(0, 0, 0, 0.03) 1px,
+      transparent 1px,
+      transparent 2px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.025) 0px,
+      rgba(0, 0, 0, 0.025) 1px,
+      transparent 1px,
+      transparent 2px
+    ),
+    radial-gradient(circle at 30% 40%, rgba(0, 0, 0, 0.06), transparent 60%);
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 6;
+  border-radius: 2px;
+}
+
+.screen canvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.screen.off {
+  background: linear-gradient(145deg, #6f7b63 0%, #7c886f 40%, #5f6a56 100%);
+  box-shadow:
+    inset 3px 3px 6px rgba(0, 0, 0, 0.45),
+    inset -2px -2px 4px rgba(255, 255, 255, 0.08);
+}
+
+/* Realistic off lcd screen */
+.screen.off canvas {
+  opacity: 0;
+}
+
+/* make lcd darker when in off state */
+.screen.off::before {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(0, 0, 0, 0.18) 55%,
+    rgba(0, 0, 0, 0.45) 100%
+  );
+}
+
+/* show grid when in off state */
+.screen.off::after {
+  opacity: 0.6;
+}
+
+.screenWrapper {
+  position: absolute;
+  top: 58px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 250px;
+  height: 200px;
+  background: linear-gradient(
+    145deg,
+    #5a4f52 0%,
+    var(--darkGray) 50%,
+    #3e3638 100%
+  );
+  border: 4px solid #111;
+  border-radius: 6px 6px 35px 6px;
+  z-index: 12;
+  box-shadow:
+    inset 3px 3px 6px rgba(0, 0, 0, 0.4),
+    inset -2px -2px 4px rgba(255, 255, 255, 0.15),
+    0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.screenWrapper:before {
+  content: "";
+  position: absolute;
+  background: linear-gradient(180deg, #0a0a0a 0%, #000 100%);
+  height: 4px;
+  left: 13px;
+  width: 100px;
+  top: 8px;
+  border-radius: 2px;
+  z-index: 13;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+.screenWrapper:after {
+  content: "";
+  position: absolute;
+  background: linear-gradient(180deg, #0a0a0a 0%, #000 100%);
+  height: 4px;
+  right: 9px;
+  width: 34px;
+  top: 8px;
+  border-radius: 2px;
+  z-index: 13;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+.screen {
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 160px;
+  height: 144px;
+  background: linear-gradient(
+    135deg,
+    #8fa07a 0%,
+    var(--screen) 40%,
+    #738465 100%
+  );
+  border: 4px solid #000;
+  border-radius: 2px;
+  image-rendering: pixelated;
+  box-shadow:
+    inset 2px 2px 4px rgba(0, 0, 0, 0.3),
+    inset -1px -1px 2px rgba(200, 220, 180, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.screen .boot-text {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: "Bitty", monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.75px;
+  color: #3a3a55;
+  opacity: 0;
+  animation: boot-fade 600ms ease forwards;
+  z-index: 40;
+}
+
+/* Screen loading states */
+.screen.loading {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.45),
+    rgba(0, 0, 0, 0.12) 50%,
+    rgba(0, 0, 0, 0.45)
+  );
+  background-size: 200% 100%;
+  color: #bfe3a6;
+}
+
+.screen.loading .loader {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 8px;
+  border: 2px solid #0b1f0b;
+  border-radius: 6px;
+  background: rgba(15, 56, 15, 0.2);
+  overflow: hidden;
+}
+
+.screen.loading .loader .bar {
+  height: 100%;
+  width: 0%;
+  background: #9bbc0f;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.3);
+  animation: load-bar var(--boot-duration, 1.2s) linear forwards;
+}
+
+.screen.booting {
+  overflow: hidden;
+  animation: none;
+}
+
+.screen .boot-wipe {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.25) 40%,
+    rgba(0, 0, 0, 0) 80%
+  );
+  transform: translateX(-120%);
+  animation: boot-wipe 1.2s ease-in-out forwards;
+  pointer-events: none;
+  z-index: 9;
+}
+
+.nontendo-text {
+  font-family: "Bitty", monospace;
+  font-size: 0.9rem;
+  color: #3a3a55;
+  text-align: center;
+  opacity: 0;
+  transform: translate(-50%, -120%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  letter-spacing: 0.5px;
+  z-index: 50;
+  transition:
+    transform 620ms cubic-bezier(0.2, 0.9, 0.2, 1),
+    opacity 420ms ease-in;
+}
+
+/* .press-start {
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "Bitty", monospace;
+  font-size: 0.9rem;
+  color: #3a3a55;
+  opacity: 0;
+  animation: blink 1s step-start infinite;
+  z-index: 60;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+} */
+
+.nontendo-text.show {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+}
+
+.screen.ready {
+  box-shadow: inset 0 0 24px rgba(150, 200, 120, 0.08);
+  animation: none;
+}
+
+/* Screen loading states */
+.screen.loading {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.45),
+    rgba(0, 0, 0, 0.12) 50%,
+    rgba(0, 0, 0, 0.45)
+  );
+  background-size: 200% 100%;
+  color: #bfe3a6;
+}
+
+.screen.ready {
+  box-shadow: inset 0 0 24px rgba(150, 200, 120, 0.08);
+  animation: none;
+}
+
+/* Power LED */
+#pwr {
+  position: absolute;
+  top: 132px;
+  left: 38px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ff5050, var(--red));
+  box-shadow:
+    0 0 8px rgba(255, 40, 40, 0.7),
+    inset 0 0 4px rgba(255, 150, 150, 0.6),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.3);
+  z-index: 20;
+  opacity: 0;
+  transition:
+    opacity 450ms ease-out,
+    filter 150ms linear;
+}
+
+#pwr.off {
+  opacity: 0.25;
+  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.5);
+  background: #4a0000;
+}
+
+#pwr.on {
+  animation: led-fade-in 600ms forwards;
+  filter: brightness(1.05);
+  box-shadow:
+    0 0 10px rgba(255, 40, 40, 0.9),
+    0 0 20px rgba(255, 40, 40, 0.5),
+    inset 0 0 6px rgba(255, 150, 150, 0.7);
+}
+
+#pwr.dim {
+  opacity: 0.5;
+  box-shadow: 0 0 6px rgba(255, 40, 40, 0.5);
+  filter: brightness(0.9);
+}
+
+#pwr.fade-out {
+  animation: led-fade-out 500ms forwards;
+}
+
+.vertical_base {
+  position: absolute;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #0a0a0a 0%, #000 100%);
+  width: 4px;
+  height: 12px;
+  top: -4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.vertical_1 {
+  left: 94px;
+}
+.vertical_2 {
+  left: 104px;
+}
+.vertical_3 {
+  left: 114px;
+}
+.vertical_4 {
+  left: 124px;
+}
+
+/* Decorative stripes */
+.stripesRow {
+  display: flex;
+  position: absolute;
+  bottom: 45px;
+  right: 9px;
+  z-index: 6;
+  transform: rotate(-45deg);
+}
+
+.stripesRow .stripe {
+  border-radius: 6px;
+  background: linear-gradient(180deg, #0a0a0a 0%, #000 100%);
+  min-width: 6px;
+  height: 30px;
+  margin-right: 9px;
+  max-width: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* power switch */
+.power-switch {
+  position: absolute;
+  top: 30px;
+  right: 15px;
+  width: 44px;
+  height: 14px;
+  background: linear-gradient(145deg, #3a3a3a, #1e1e1e);
+  border-radius: 6px;
+  box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, 0.1),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.5),
+    0 1px 2px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  z-index: 100;
+}
+
+.power-labels {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 44px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 101;
+}
+
+.power-text {
+  font-size: 7px;
+  font-family: "Bitty", monospace;
+  color: #bbbbbbcf;
+  text-shadow: 1px 1px 0 #444;
+  user-select: none;
+  pointer-events: none;
+  letter-spacing: 0.5px;
+}
+
+.power-switch.on .power-labels .on-text {
+  color: #fff; /* brighter ON */
+}
+
+.power-switch.off .power-labels .off-text {
+  color: #fff; /* brighter OFF */
+}
+
+.power-knob {
+  width: 18px;
+  height: 11px;
+  background: linear-gradient(145deg, #666, #333);
+  border-radius: 5px;
+  margin: 1px;
+  transition: transform 0.15s ease;
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.25),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* ON position */
+.power-switch.on .power-knob {
+  transform: translateX(24px);
+  background: linear-gradient(145deg, #888, #555);
+}
+
+/* Enhanced D-Pad with 4 independent buttons */
+.joystickWrapper {
+  position: absolute;
+  bottom: 100px;
+  left: 35px;
+  background: radial-gradient(circle at 35% 35%, #fb7c17, var(--dark-orange));
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  z-index: 6;
+  box-shadow:
+    inset 2px 2px 4px var(--dark-orange-shadow),
+    inset -1px -1px 2px rgba(255, 150, 100, 0.3),
+    0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* D-pad center circle */
+.joystickWrapper:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 26px;
+  height: 26px;
+  background: linear-gradient(145deg, #6e5254, var(--darkGray2), #564244);
+  border-radius: 50%;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+/* Reset button styles for D-pad */
+.dpad-btn {
+  position: absolute;
+  background: linear-gradient(145deg, #6e5254, var(--darkGray2), #564244);
+  border: 4px solid #000;
+  cursor: pointer;
+  transition:
+    transform 0.08s,
+    box-shadow 0.08s;
+  box-shadow:
+    inset 1px 1px 2px rgba(255, 255, 255, 0.2),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+/* Arrow symbols using ::before */
+.dpad-btn[data-input="up"]::before {
+  content: "▲";
+}
+
+.dpad-btn[data-input="down"]::before {
+  content: "▼";
+}
+
+.dpad-btn[data-input="left"]::before {
+  content: "◄";
+}
+
+.dpad-btn[data-input="right"]::before {
+  content: "►";
+}
+
+/* D-pad Up */
+.dpad-btn[data-input="up"] {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 26px;
+  height: 38px;
+  border-radius: 9px 9px 0 0;
+}
+
+.dpad-btn[data-input="up"]:active,
+.dpad-btn[data-input="up"].pressed {
+  transform: translate(-50%, 3px);
+  box-shadow:
+    inset 0 3px 5px rgba(0, 0, 0, 0.6),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.1),
+    0 1px 2px rgba(0, 0, 0, 0.2);
+  filter: brightness(0.85);
+}
+
+/* D-pad Down */
+.dpad-btn[data-input="down"] {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 26px;
+  height: 38px;
+  border-radius: 0 0 9px 9px;
+}
+
+.dpad-btn[data-input="down"]:active,
+.dpad-btn[data-input="down"].pressed {
+  transform: translate(-50%, -3px);
+  box-shadow:
+    inset 0 -3px 5px rgba(0, 0, 0, 0.6),
+    inset 0 1px 2px rgba(255, 255, 255, 0.1),
+    0 1px 2px rgba(0, 0, 0, 0.2);
+  filter: brightness(0.85);
+}
+
+/* D-pad Left */
+.dpad-btn[data-input="left"] {
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 26px;
+  border-radius: 9px 0 0 9px;
+}
+
+.dpad-btn[data-input="left"]:active,
+.dpad-btn[data-input="left"].pressed {
+  transform: translate(3px, -50%);
+  box-shadow:
+    inset 3px 0 5px rgba(0, 0, 0, 0.6),
+    inset -1px 0 2px rgba(255, 255, 255, 0.1),
+    0 1px 2px rgba(0, 0, 0, 0.2);
+  filter: brightness(0.85);
+}
+
+/* D-pad Right */
+.dpad-btn[data-input="right"] {
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 26px;
+  border-radius: 0 9px 9px 0;
+}
+
+.dpad-btn[data-input="right"]:active,
+.dpad-btn[data-input="right"].pressed {
+  transform: translate(-3px, -50%);
+  box-shadow:
+    inset -3px 0 5px rgba(0, 0, 0, 0.6),
+    inset 1px 0 2px rgba(255, 255, 255, 0.1),
+    0 1px 2px rgba(0, 0, 0, 0.2);
+  filter: brightness(0.85);
+}
+
+/* A/B Buttons */
+.buttonsWrap {
+  position: absolute;
+  bottom: 131px;
+  right: 28px;
+  background: radial-gradient(circle at 35% 35%, #fb7c17, var(--dark-orange));
+  border-radius: 100px;
+  width: 91px;
+  height: 42px;
+  z-index: 6;
+  transform: rotate(-45deg);
+  box-shadow:
+    inset 2px 2px 4px var(--dark-orange-shadow),
+    inset -1px -1px 2px rgba(255, 150, 100, 0.3),
+    0 4px 8px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 5px 5px 5px;
+}
+
+.button {
+  background: radial-gradient(circle at 35% 35%, #ff4040, var(--red), #d01818);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 4px solid #000;
+  cursor: pointer;
+  transition:
+    transform 0.08s,
+    box-shadow 0.08s;
+  box-shadow:
+    inset 1px 1px 3px rgba(255, 100, 100, 0.4),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.4),
+    0 3px 6px rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+
+.button:active,
+.button.pressed {
+  transform: translateY(2px);
+  box-shadow:
+    inset 1px 1px 4px rgba(0, 0, 0, 0.6),
+    0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.button .btn-label {
+  position: absolute;
+  font-size: 10px;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.4);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* Button labels */
+.btn-labels #btnA {
+  font-family: "Bitty", monospace;
+  font-weight: 800;
+  position: absolute;
+  left: 254px;
+  bottom: 137px;
+  transform: rotate(-45deg);
+  z-index: 6;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.btn-labels #btnB {
+  font-family: "Bitty", monospace;
+  font-weight: 800;
+  position: absolute;
+  bottom: 100px;
+  left: 218px;
+  transform: rotate(-45deg);
+  z-index: 6;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Enhanced Start/Select buttons */
+.select-btn,
+.start-btn {
+  width: 40px;
+  height: 13px;
+  position: absolute;
+  bottom: 67px;
+  transform: rotate(-45deg);
+  border: 4px solid #000;
+  border-radius: 8px;
+  z-index: 6;
+  background: linear-gradient(145deg, #5a4f52, var(--darkGray), #3e3638);
+  box-shadow:
+    inset 1px 1px 2px rgba(255, 255, 255, 0.2),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.4),
+    0 3px 6px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition:
+    transform 0.08s ease,
+    box-shadow 0.08s ease;
+}
+
+.select-btn {
+  left: 109px;
+}
+
+.start-btn {
+  left: 144px;
+}
+
+.select-btn:active,
+.start-btn:active {
+  transform: rotate(-45deg) translateY(2px);
+  box-shadow:
+    inset 1px 1px 3px rgba(0, 0, 0, 0.5),
+    0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.start-btn.pressed,
+.select-btn.pressed {
+  transform: rotate(-45deg) translateY(2px);
+  box-shadow:
+    inset 1px 1px 3px rgba(0, 0, 0, 0.5),
+    0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+#selectBtn,
+#startBtn {
+  font-size: 0.55em;
+  font-family: "Bitty", monospace;
+  font-weight: 800;
+  position: relative;
+  pointer-events: none;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+#selectBtn {
+  bottom: -4px;
+}
+
+#startBtn {
+  left: 2px;
+  bottom: -10px;
+}
+
+/* Press Start text */
+.press-start {
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "Bitty", monospace;
+  font-size: 0.75rem;
+  color: #3a3a55;
+  opacity: 0;
+  animation: blink 1s step-start infinite;
+  z-index: 60;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Message */
+.message {
+  position: relative;
+  margin-top: 20px;
+  font-family: "Bitty", monospace;
+  font-size: 0.9rem;
+  color: #3a3a55;
+  text-align: center;
+  max-width: 400px;
+  line-height: 1.5;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Animations */
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes screen-sweep {
+  from {
+    transform: translateX(-100%);
+    opacity: 0.8;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes boot-wipe {
+  from {
+    transform: translateX(-120%);
+  }
+  to {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes progress-fill {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+@keyframes load-bar {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes boot-fade {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes led-fade-in {
+  0% {
+    opacity: 0;
+    filter: brightness(0.5);
+  }
+  40% {
+    opacity: 0.6;
+    filter: brightness(0.9);
+  }
+  100% {
+    opacity: 0.98;
+    filter: brightness(1.05);
+  }
+}
+
+@keyframes led-fade-out {
+  0% {
+    opacity: 0.98;
+    filter: brightness(1.05);
+  }
+  100% {
+    opacity: 0;
+    filter: brightness(0.5);
+  }
+}

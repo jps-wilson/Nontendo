@@ -1,0 +1,5 @@
+/* Michroma Font */
+@font-face {
+  font-family: "Bitty";
+  src: local("/assets/fonts/Bitty.ttf") format("truetype");
+}

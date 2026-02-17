@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nontendo</title>
+    <link rel="stylesheet" href="/css/fonts.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <!-- Main Gameboy Container -->
+    <main class="wrapper gameboy">
+
+        <!-- Shadows Section -->
+        <section class="shadows">
+            <div class="leftLightShadow"></div>
+            <div class="rightDarkShadow"></div>
+            <div class="bottomCornerAngle"></div>
+            <div class="bottomShadow"></div>
+        </section>
+
+        <div class="topStripes"></div>
+
+        <!-- power switch -->
+        <div class="power-switch" aria-label="Power switch">
+            <div class="power-knob"></div>
+            <div class="power-labels">
+                <span class="power-text off-text">OFF</span>
+                <span class="power-text on-text">ON</span>
+            </div>
+        </div>
+
+        <!-- Screen Section -->
+        <section class="screenWrapper screen-frame">
+            <div class="screen">
+                <canvas id="screenCanvas" width="160" height="144"></canvas>
+            </div>
+        </section>
+
+
+        <div id="pwr" class="off"></div>
+
+        <!-- Vertical notches under the screen -->
+        <div class="vertical_base vertical_1"></div>
+        <div class="vertical_base vertical_2"></div>
+        <div class="vertical_base vertical_3"></div>
+        <div class="vertical_base vertical_4"></div>
+        </div>
+
+        <!-- Angles notches in the corner -->
+        <div class="stripesRow">
+            <div class="stripe"></div>
+            <div class="stripe"></div>
+            <div class="stripe"></div>
+            <div class="stripe"></div>
+            <div class="stripe"></div>
+        </div>
+
+        <!-- Controls section -->
+        <section class="controls">
+            <!-- D Pad -->
+            <div class="joystickWrapper dpad">
+                <button class="joystick_1 dpad-btn" data-input="up" aria-label="D-pad up"></button>
+                <button class="joystick_1 dpad-btn" data-input="right" aria-label="D-pad right"></button>
+                <button class="joystick_1 dpad-btn" data-input="down" aria-label="D-pad down"></button>
+                <button class="joystick_1 dpad-btn" data-input="left" aria-label="D-pad left"></button>
+            </div>
+
+            <!-- A B Buttons -->
+            <div class="buttonsWrap ab-buttons">
+                <button class="button" data-input="b" aria-label="B button">
+                    <span class="btn-label">B</span>
+                </button>
+                <button class="button" data-input="a" aria-label="A button">
+                    <span class="btn-label">A</span>
+                </button>
+            </div>
+
+            <!-- Start and Select Buttons -->
+            <div class="system-buttons">
+                <button class="select-btn" data-input="select">
+                    <span id="selectBtn">SELECT</span>
+                </button>
+                <button class="start-btn" data-input="start">
+                    <span id="startBtn">START</span>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <script src="/js/gameboy.js"></script>
+</body>
+
+</html>
