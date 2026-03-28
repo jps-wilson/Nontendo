@@ -464,6 +464,29 @@ document.addEventListener("DOMContentLoaded", () => {
     button.addEventListener("mouseleave", () => {
       button.classList.remove("pressed");
     });
+
+    button.addEventListener(
+      "touchstart",
+      (e) => {
+        e.preventDefault();
+        button.classList.add("pressed");
+        handleInput(input);
+      },
+      { passive: false },
+    );
+
+    button.addEventListener(
+      "touchend",
+      (e) => {
+        e.preventDefault();
+        button.classList.remove("pressed");
+      },
+      { passive: false },
+    );
+
+    button.addEventListener("touchcancel", () => {
+      button.classList.remove("pressed");
+    });
   });
 
   // Keyboard controls
