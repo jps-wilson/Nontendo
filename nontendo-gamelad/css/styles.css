@@ -379,21 +379,6 @@ body {
     opacity 420ms ease-in;
 }
 
-/* .press-start {
-  position: absolute;
-  bottom: 15%;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: "Bitty", monospace;
-  font-size: 0.9rem;
-  color: #3a3a55;
-  opacity: 0;
-  animation: blink 1s step-start infinite;
-  z-index: 60;
-  text-align: center;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-} */
-
 .nontendo-text.show {
   opacity: 1;
   transform: translate(-50%, -50%);
@@ -897,6 +882,18 @@ body {
   max-width: 400px;
   line-height: 1.5;
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.instructions {
+  font-family: "Bitty", monospace;
+  font-size: 0.6rem;
+  color: #f0ede8;
+  opacity: 0.3;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 40px;
 }
 
 /* Animations */
