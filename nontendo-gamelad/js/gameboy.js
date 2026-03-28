@@ -527,9 +527,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // INITIALIZATION
-  isOn = false;
-  pwr.classList.add("off");
-  pwr.classList.remove("on", "dim");
-  screenDiv.classList.add("off"); // Start with screen in off state
+  // INITIALIZATION - start powered on
+  powerSwitch.classList.add("on");
+  powerOn();
 });
