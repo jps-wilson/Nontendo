@@ -1,6 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // console.log("DOM loaded");
-
   // DOM ELEMENT REFERENCES
   const pwr = document.getElementById("pwr");
   const powerSwitch = document.querySelector(".power-switch");
